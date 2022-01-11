@@ -1,19 +1,18 @@
-# griptape-contracts-vue
+# Interacting with contracts
 
-## Project setup
-```
+This example shows how to create a contract definition and how to interact with the contract, 
+in a simple exercise by incrementing a counter by one. 
+
+## Run it locally
+
+### Install dependencies:
+
+```bash
 yarn install
 ```
 
-### Compiles and hot-reloads for development
-```
+### Serve the app:
+
+```bash
 yarn serve
 ```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
