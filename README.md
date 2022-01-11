@@ -1,10 +1,3 @@
-# Griptape.js
+# Griptape.js Tutorials
 
-Griptape.js is...
-
-## Installation
-
-Use the package manager..
-
-## Usage
-
+Tutorials using Griptape.js.
