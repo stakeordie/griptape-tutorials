@@ -53,8 +53,16 @@ export default {
         // In case is not empty, parse the result.
         const { create_viewing_key: { key } } = result.parse();
 
-        // Add the generated viewing key to the viewing key manager.
-        viewingKeyManager.add(sscrt, key);
+        // Check if there's already a viewing key.
+        const currentKey = viewingKeyManager.get(sscrt.at);
+
+        // If there is, update the viewing key using the `set`
+        // function. Otherwise, add it.
+        if (currentKey) {
+          viewingKeyManager.set(sscrt, key);
+        } else {
+          viewingKeyManager.add(sscrt, key);
+        }
 
         // Update UI.
         this.viewingKey = key;
