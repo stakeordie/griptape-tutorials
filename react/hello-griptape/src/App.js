@@ -26,8 +26,7 @@ function App() {
   const getBalance = async () => {
     var balance = await getNativeCoinBalance();
     balance = coinConvert(balance, 6, 'human');
-    setCoins(balance)
-
+    setCoins(balance);
   }
 
   return (

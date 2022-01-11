@@ -1,19 +1,18 @@
-# hello-world
+# Getting your address and balance
 
-## Project setup
-```
-yarn install
-```
+This example shows how to get your wallet address and once you got the address,
+shows how to get your balance.
 
-### Compiles and hot-reloads for development
-```
+## Run it locally
+
+### Install dependencies:
+
+```bash
 yarn serve
 ```
 
-### Compiles and minifies for production
-```
+### Serve the app:
+
+```bash
 yarn build
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
