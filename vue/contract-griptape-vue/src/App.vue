@@ -1,7 +1,8 @@
 <template>
   <div>
+    <h1>Hello, Griptape!</h1>
     <p>Your count is: {{ count }}</p>
-
+    <button @click="connect">Connect</button>
     <button @click="getCount">Get count</button>
     <button @click="incrementCount">
       <span v-if="loading">Loading...</span>
@@ -12,6 +13,7 @@
 
 <script>
 import { counterContract } from './contracts/counter';
+import { bootstrap } from '@stakeordie/griptape.js';
 
 export default {
   data: () => ({
@@ -23,6 +25,9 @@ export default {
     async getCount() {
       const response = await counterContract.getCount();
       this.count = response.count;
+    },
+    async connect() {
+      await bootstrap();
     },
 
     async incrementCount() {

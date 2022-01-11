@@ -1,7 +1,9 @@
 <template>
   <div>
+    <h1>Hello, Griptape!</h1>
     <p>Your viewing key is: {{ viewingKey }}</p>
     <p>Your balance is: {{ balance }}</p>
+    <button @click="connect">Connect</button>
     <button @click="createViewingKey">
       <span v-if="loading">Loading...</span>
       <span v-else>Create Viewing Key</span>
@@ -14,6 +16,7 @@
 import {
   viewingKeyManager,
   coinConvert,
+  bootstrap,
   onAccountAvailable
 } from '@stakeordie/griptape.js';
 import { sscrt } from './contracts/sscrt';
@@ -60,6 +63,9 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+    async connect() {
+      await bootstrap();
     },
 
     async getBalance() {

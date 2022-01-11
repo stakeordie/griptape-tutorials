@@ -2,7 +2,6 @@
   <div>
     <h1>Hello, Griptape!</h1>
     <button @click="connect">Connect</button>
-
     <p>Your address is: {{ address }}</p>
     <p>You balance is: {{ balance }}</p>
   </div>
