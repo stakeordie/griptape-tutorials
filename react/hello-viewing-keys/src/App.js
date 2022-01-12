@@ -49,6 +49,15 @@ function App() {
       viewingKeyManager.add(sscrt, key);
       setViewingKey(key);
 
+      const currentKey = viewingKeyManager.get(sscrt.at);
+      // If there is, update the viewing key using the `set`
+      // function. Otherwise, add it.
+      if (currentKey) {
+        viewingKeyManager.set(sscrt, key);
+      } else {
+        viewingKeyManager.add(sscrt, key);
+      }
+
     } catch (e) {
       // ignore for now
     } finally {
