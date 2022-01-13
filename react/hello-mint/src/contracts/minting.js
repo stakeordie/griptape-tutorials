@@ -9,7 +9,9 @@ const def = {
     mintNft(){
       const handleMsg = {};
       return {handleMsg};
-    },
+    }
+  },
+  queries: {
     getTokens(){
       const handleMsg = {};
       return {handleMsg};
@@ -19,7 +21,7 @@ const def = {
       return {handleMsg};
     }
   }
-}
+};
 
 const definition = extendContract(snip721Def, def);
 
