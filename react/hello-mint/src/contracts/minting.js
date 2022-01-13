@@ -9,6 +9,14 @@ const def = {
     mintNft(){
       const handleMsg = {};
       return {handleMsg};
+    },
+    getTokens(){
+      const handleMsg = {};
+      return {handleMsg};
+    },
+    getNftDossier(){
+      const handleMsg = {};
+      return {handleMsg};
     }
   }
 }
