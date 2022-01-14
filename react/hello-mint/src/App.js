@@ -6,15 +6,18 @@ import {
   getAddress
 } from '@stakeordie/griptape.js';
 import { minting } from './contracts/minting';
+import TokenList from "./contracts/components/TokenList";
 
 function App() {
 
   var [loading, setLoading] = useState(false);
   var [loadingMint, setLoadingMint] = useState(false);
   var [loadingTokens, setLoadingTokens] = useState(false);
+  var [loadingNft, setLoadingNft] = useState(true);
   var [viewingKey, setViewingKey] = useState('');
   var [address, setAddress] = useState('');
-  var [tokenList, setTokenList] = useState([]);
+  var [nftList, setNftList] = useState([]);
+
 
   useEffect(() => {
     onAccountAvailable(() => {
@@ -54,16 +57,11 @@ function App() {
 
     setLoadingTokens(true);
     try {
+      setNftList([])
 
       const tokens = await minting.getTokens();
       const token_list = tokens.token_list.tokens;
-      console.log(token_list);
-
-      setTokenList(token_list);
-
-      const token = await minting.getNftDossier("271");
-
-      console.log(token);
+      getNftDetail(token_list);
 
     } catch (e) {
       // ignore for now
@@ -71,6 +69,32 @@ function App() {
       setLoadingTokens(false);
     }
 
+  }
+
+  const getNftDetail = (token_list) => {
+
+    setLoadingNft(true);
+    try {
+      token_list.forEach(async (token) => {
+
+        const nftDossier = await minting.getNftDossier(token);
+
+        const nftDetail = {
+          name: nftDossier.nft_dossier.public_metadata.extension.name,
+          description: nftDossier.nft_dossier.public_metadata.extension.description,
+          image: nftDossier.nft_dossier.public_metadata.extension.image,
+        }
+
+        nftList.push(nftDetail);
+
+      });
+
+    } catch (e) {
+      // ignore for now
+    } finally {
+
+      setLoadingNft(false);
+    }
   }
 
   const createViewingKey = async () => {
@@ -101,15 +125,7 @@ function App() {
     }
 
   }
-  function TokenList(props) {
-    const tokens = props.tokens;
-    const listItems = tokens.map((tokenID) =>
-      <li>{tokenID}</li>
-    );
-    return (
-      <ul>{listItems}</ul>
-    );
-  }
+
 
   return (
     <>
@@ -120,8 +136,7 @@ function App() {
       <br></br>
       <button onClick={() => { getTokens(); }}>{loadingTokens ? 'Loading...' : 'Get Tokens'}</button>
       <button onClick={() => { createViewingKey(); }}>{loading ? 'Loading...' : 'Create Viewing Key'}</button>
-
-      <TokenList tokens={tokenList} />
+      <div>{loadingNft ? '' : <TokenList nftList={nftList} />}</div>
 
     </>
   );
