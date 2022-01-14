@@ -1,15 +1,15 @@
 import {
   createContract,
   snip721Def,
-  extendContract,
-  Context
+  extendContract
 } from '@stakeordie/griptape.js';
 
 const def = {
   messages:{
-    mintNft(Context, {name, description}){
+    mintNft(ctx, {name, description}){
       const handleMsg = {
         mint_nft: {
+          owner:ctx.address,
           public_metadata: {
             extension: {
               name, 
@@ -19,6 +19,15 @@ const def = {
         }
       };
       return {handleMsg};
+    }
+  },
+  queries:{
+    getTokens({address, key}){
+      return {tokens:{
+        viewer: address,
+        owner: address,
+        viewing_key: key
+      }}
     }
   }
 };

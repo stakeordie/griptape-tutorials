@@ -14,6 +14,7 @@ function App() {
   var [loadingTokens, setLoadingTokens] = useState(false);
   var [viewingKey, setViewingKey] = useState('');
   var [address, setAddress] = useState('');
+  var [tokenList, setTokenList] = useState([]);
 
   useEffect(() => {
     onAccountAvailable(() => {
@@ -30,16 +31,16 @@ function App() {
 
   const mint = async () => {
 
+    var date = Date.now();
+
     const data = {
-      name: "hola",
-      description: "mundo"
+      name: "Hello World",
+      description: `Example ${date}`
     }
 
     setLoadingMint(true);
     try {
       const mint = await minting.mintNft(data);
-
-      console.log(mint);
 
     } catch (e) {
       // ignore for now
@@ -54,16 +55,15 @@ function App() {
     setLoadingTokens(true);
     try {
 
-      console.log(getAddress())
-      console.log("vk",viewingKeyManager.get(minting.at))
+      const tokens = await minting.getTokens();
+      const token_list = tokens.token_list.tokens;
+      console.log(token_list);
 
-      const data = {
-        address: getAddress(),
-        viewing_key: viewingKeyManager.get(minting.at)
-      }
-      const tokens = await minting.getTokens(data);
+      setTokenList(token_list);
 
-      console.log("tokens",tokens);
+      const token = await minting.getNftDossier("271");
+
+      console.log(token);
 
     } catch (e) {
       // ignore for now
@@ -81,12 +81,12 @@ function App() {
 
       if (result.isEmpty()) return;
 
-      const { create_viewing_key: { key } } = result.parse();
+      const { viewing_key: { key } } = result.parse();
       viewingKeyManager.add(minting, key);
       setViewingKey(key);
 
       const currentKey = viewingKeyManager.get(minting.at);
-  
+
       if (currentKey) {
         viewingKeyManager.set(minting, key);
       } else {
@@ -94,23 +94,34 @@ function App() {
       }
 
     } catch (e) {
-      // ignore for now
+      console.error(e)
     } finally {
 
       setLoading(false);
     }
 
   }
+  function TokenList(props) {
+    const tokens = props.tokens;
+    const listItems = tokens.map((tokenID) =>
+      <li>{tokenID}</li>
+    );
+    return (
+      <ul>{listItems}</ul>
+    );
+  }
 
   return (
     <>
       <h1>Hello, Griptape!</h1>
       <button onClick={() => { connect(); }}>Connect</button>
-      <button onClick={() => { mint() }}>{loadingMint ? 'Loading...' : 'Mint'}</button>
+      <button onClick={() => { mint(); }}>{loadingMint ? 'Loading...' : 'Mint'}</button>
       <br></br>
       <br></br>
-      <button onClick={() => { getTokens() }}>{loadingTokens ? 'Loading...' : 'Get Tokens'}</button>
-      <button onClick={() => { createViewingKey() }}>{loading ? 'Loading...' : 'Create Viewing Key'}</button>
+      <button onClick={() => { getTokens(); }}>{loadingTokens ? 'Loading...' : 'Get Tokens'}</button>
+      <button onClick={() => { createViewingKey(); }}>{loading ? 'Loading...' : 'Create Viewing Key'}</button>
+
+      <TokenList tokens={tokenList} />
 
     </>
   );
