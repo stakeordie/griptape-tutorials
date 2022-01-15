@@ -16,7 +16,7 @@ function App() {
   var [loadingNft, setLoadingNft] = useState(true);
   var [viewingKey, setViewingKey] = useState('');
   var [address, setAddress] = useState('');
-  var [nftList, setNftList] = useState([]);
+  var [nftList, setNftList] = useState(false);
 
 
   useEffect(() => {
@@ -75,6 +75,9 @@ function App() {
 
     setLoadingNft(true);
     try {
+
+      let list = [];
+
       token_list.forEach(async (token) => {
 
         const nftDossier = await minting.getNftDossier(token);
@@ -84,10 +87,12 @@ function App() {
           description: nftDossier.nft_dossier.public_metadata.extension.description,
           image: nftDossier.nft_dossier.public_metadata.extension.image,
         }
-
-        nftList.push(nftDetail);
-
+        list.push(nftDetail);
       });
+
+      if(list.length > 0)
+        setNftList(list)
+
 
     } catch (e) {
       // ignore for now
@@ -136,7 +141,7 @@ function App() {
       <br></br>
       <button onClick={() => { getTokens(); }}>{loadingTokens ? 'Loading...' : 'Get Tokens'}</button>
       <button onClick={() => { createViewingKey(); }}>{loading ? 'Loading...' : 'Create Viewing Key'}</button>
-      <div>{loadingNft ? '' : <TokenList nftList={nftList} />}</div>
+      {nftList && (<div>{<TokenList nftList={nftList} />}</div>)}
 
     </>
   );
