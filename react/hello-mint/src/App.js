@@ -6,17 +6,16 @@ import {
   getAddress
 } from '@stakeordie/griptape.js';
 import { minting } from './contracts/minting';
-import TokenList from "./contracts/components/TokenList";
+import TokenList from "./components/TokenList";
 
 function App() {
 
   var [loading, setLoading] = useState(false);
   var [loadingMint, setLoadingMint] = useState(false);
   var [loadingTokens, setLoadingTokens] = useState(false);
-  var [loadingNft, setLoadingNft] = useState(true);
   var [viewingKey, setViewingKey] = useState('');
   var [address, setAddress] = useState('');
-  var [nftList, setNftList] = useState(false);
+  var [nftList, setNftList] = useState([]);
 
 
   useEffect(() => {
@@ -48,6 +47,7 @@ function App() {
     } catch (e) {
       // ignore for now
     } finally {
+
       setLoadingMint(false);
     }
 
@@ -57,11 +57,9 @@ function App() {
 
     setLoadingTokens(true);
     try {
-      setNftList([])
-
       const tokens = await minting.getTokens();
       const token_list = tokens.token_list.tokens;
-      getNftDetail(token_list);
+      await getNftDetail(token_list);
 
     } catch (e) {
       // ignore for now
@@ -71,34 +69,32 @@ function App() {
 
   }
 
-  const getNftDetail = (token_list) => {
-
-    setLoadingNft(true);
+  const getNftDetail = async (token_list) => {
+    let lista = [];
+ 
     try {
 
-      let list = [];
+      await token_list.map(async (token) => {
+    
+          const nftDossier = await minting.getNftDossier(token);
 
-      token_list.forEach(async (token) => {
+          const nftDetail = {
+            name: nftDossier.nft_dossier.public_metadata.extension.name,
+            description: nftDossier.nft_dossier.public_metadata.extension.description,
+            image: nftDossier.nft_dossier.public_metadata.extension.image,
+          }
+          lista.push(nftDetail)
+    
 
-        const nftDossier = await minting.getNftDossier(token);
+      })
 
-        const nftDetail = {
-          name: nftDossier.nft_dossier.public_metadata.extension.name,
-          description: nftDossier.nft_dossier.public_metadata.extension.description,
-          image: nftDossier.nft_dossier.public_metadata.extension.image,
-        }
-        list.push(nftDetail);
-      });
-
-      if(list.length > 0)
-        setNftList(list)
+      setNftList(lista);
 
 
     } catch (e) {
-      // ignore for now
+      console.error(e)
     } finally {
 
-      setLoadingNft(false);
     }
   }
 
@@ -141,7 +137,7 @@ function App() {
       <br></br>
       <button onClick={() => { getTokens(); }}>{loadingTokens ? 'Loading...' : 'Get Tokens'}</button>
       <button onClick={() => { createViewingKey(); }}>{loading ? 'Loading...' : 'Create Viewing Key'}</button>
-      {nftList && (<div>{<TokenList nftList={nftList} />}</div>)}
+      <TokenList nftList={nftList} />
 
     </>
   );

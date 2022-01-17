@@ -7,6 +7,7 @@
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "babel-preset-es2015": "^6.24.1",
     "crypto-browserify": "^3.12.0",
     "git": "^0.1.5",
     "path": "^0.12.7",
