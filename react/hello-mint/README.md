@@ -1,6 +1,6 @@
-# Interacting with a SNIP-20 contract
+# Interacting with a SNIP-721
 
-This example shows how to interact with a SNIP-20 contract by performing a transaction entering the recipient and the amount to send.
+This example shows how to interact with a SNIP-721 contract by minting, getting a viewing key and getting tokens.
 
 ## Run it locally
 
