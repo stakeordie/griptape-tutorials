@@ -6,9 +6,8 @@ function TokenList({ nftList }) {
         return nftList.map(item => {
             return (
                 <div>
+                    <div>{item.image ? <img src={item.image} alt="[image]"></img> : <img src="https://i.picsum.photos/id/551/200/300.jpg?hmac=pXJCWIikY_BiqwhtawBb8x1jxclDny0522ZprZVTJiU" alt="[image]"></img>}</div>
                     <div>{item.name}</div>
-                    <div>{item.description}</div>
-                    <div>{item.image}</div>
                 </div>
             );
         });

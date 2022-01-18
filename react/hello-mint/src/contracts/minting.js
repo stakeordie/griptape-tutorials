@@ -6,14 +6,15 @@ import {
 
 const def = {
   messages:{
-    mintNft(ctx, {name, description}){
+    mintNft(ctx, {name, description, image}){
       const handleMsg = {
         mint_nft: {
           owner:ctx.address,
           public_metadata: {
             extension: {
               name, 
-              description
+              description,
+              image
             }
           }
         }

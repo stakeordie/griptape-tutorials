@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   bootstrap,
   viewingKeyManager,
-  onAccountAvailable,
-  getAddress
+  onAccountAvailable
 } from '@stakeordie/griptape.js';
 import { minting } from './contracts/minting';
 import TokenList from "./components/TokenList";
@@ -14,9 +13,7 @@ function App() {
   var [loadingMint, setLoadingMint] = useState(false);
   var [loadingTokens, setLoadingTokens] = useState(false);
   var [viewingKey, setViewingKey] = useState('');
-  var [address, setAddress] = useState('');
   var [nftList, setNftList] = useState([]);
-
 
   useEffect(() => {
     onAccountAvailable(() => {
@@ -36,8 +33,9 @@ function App() {
     var date = Date.now();
 
     const data = {
-      name: "Hello World",
-      description: `Example ${date}`
+      name: `Example ${date}`,
+      description: "test",
+      image: 'https://i.picsum.photos/id/586/200/300.jpg?hmac=Ugf94OPRVzdbHxLu5sunf4PTa53u3gDVzdsh5jFCwQE'
     }
 
     setLoadingMint(true);
@@ -47,7 +45,6 @@ function App() {
     } catch (e) {
       // ignore for now
     } finally {
-
       setLoadingMint(false);
     }
 
@@ -58,7 +55,6 @@ function App() {
     setLoadingTokens(true);
     try {
       const tokens = await minting.getTokens();
-      console.log(tokens);
       const token_list = tokens.token_list.tokens;
       await getNftDetail(token_list);
 
@@ -67,23 +63,22 @@ function App() {
     } finally {
       setLoadingTokens(false);
     }
-
   }
 
   const getNftDetail = async (token_list) => {
     const promises = token_list.map(token => {
-        return minting.getNftDossier(token);
+      return minting.getNftDossier(token);
     });
 
     const result = await Promise.allSettled(promises);
     const tokens = result
-        .filter(item => item.status === 'fulfilled')
-        .map(item => item.value.nft_dossier)
-        .map(({ public_metadata: { extension } }) => ({
-            name: extension.name,
-            description: extension.description,
-            image: extension.image 
-        }));
+      .filter(item => item.status === 'fulfilled')
+      .map(item => item.value.nft_dossier)
+      .map(({ public_metadata: { extension } }) => ({
+        name: extension.name,
+        description: extension.description,
+        image: extension.image
+      }));
 
     setNftList(tokens);
   }
@@ -127,8 +122,8 @@ function App() {
       <br></br>
       <button onClick={() => { getTokens(); }}>{loadingTokens ? 'Loading...' : 'Get Tokens'}</button>
       <button onClick={() => { createViewingKey(); }}>{loading ? 'Loading...' : 'Create Viewing Key'}</button>
+      <br></br>
       <TokenList nftList={nftList} />
-
     </>
   );
 }
