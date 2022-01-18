@@ -29,35 +29,28 @@ function App() {
   }
 
   const mint = async () => {
-
     var date = Date.now();
-
     const data = {
       name: `Example ${date}`,
       description: "test",
       image: 'https://i.picsum.photos/id/586/200/300.jpg?hmac=Ugf94OPRVzdbHxLu5sunf4PTa53u3gDVzdsh5jFCwQE'
     }
-
     setLoadingMint(true);
     try {
       const mint = await minting.mintNft(data);
-
     } catch (e) {
       // ignore for now
     } finally {
       setLoadingMint(false);
     }
-
   }
 
   const getTokens = async () => {
-
     setLoadingTokens(true);
     try {
       const tokens = await minting.getTokens();
       const token_list = tokens.token_list.tokens;
       await getNftDetail(token_list);
-
     } catch (e) {
       // ignore for now
     } finally {
@@ -84,7 +77,6 @@ function App() {
   }
 
   const createViewingKey = async () => {
-
     setLoading(true);
     try {
       const result = await minting.createViewingKey();
@@ -94,7 +86,6 @@ function App() {
       const { viewing_key: { key } } = result.parse();
       viewingKeyManager.add(minting, key);
       setViewingKey(key);
-
       const currentKey = viewingKeyManager.get(minting.at);
 
       if (currentKey) {
@@ -102,17 +93,13 @@ function App() {
       } else {
         viewingKeyManager.add(minting, key);
       }
-
     } catch (e) {
       console.error(e)
     } finally {
-
       setLoading(false);
     }
-
   }
-
-
+  
   return (
     <>
       <h1>Hello, Griptape!</h1>

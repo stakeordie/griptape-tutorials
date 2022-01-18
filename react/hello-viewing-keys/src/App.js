@@ -28,12 +28,9 @@ function App() {
 
   const getBalance = async () => {
     const key = viewingKeyManager.get(sscrt.at);
-
     if (!key) return;
-
     const amount = await sscrt.getBalance();
     const balance = coinConvert(amount.balance.amount, 6, 'human');
-
     setCoins(balance);
   }
 
@@ -48,20 +45,16 @@ function App() {
       const { create_viewing_key: { key } } = result.parse();
       viewingKeyManager.add(sscrt, key);
       setViewingKey(key);
-
       const currentKey = viewingKeyManager.get(sscrt.at);
-      // If there is, update the viewing key using the `set`
-      // function. Otherwise, add it.
+     
       if (currentKey) {
         viewingKeyManager.set(sscrt, key);
       } else {
         viewingKeyManager.add(sscrt, key);
       }
-
     } catch (e) {
       // ignore for now
     } finally {
-
       setLoading(false);
     }
 

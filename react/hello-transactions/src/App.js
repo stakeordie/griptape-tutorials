@@ -42,12 +42,10 @@ function App() {
 
     const amount = await sscrt.getBalance();
     const balance = coinConvert(amount.balance.amount, 6, 'human');
-
     setCoins(balance);
   }
 
   const createViewingKey = async () => {
-
     setLoading(true);
     try {
       const result = await sscrt.createViewingKey();
@@ -85,7 +83,6 @@ function App() {
         value={amount}></input>
       <br></br>
       <button onClick={() => { sendCoins() }}>{loadingSend ? 'Loading...' : 'Send'}</button>
-
     </>
   );
 }
