@@ -58,6 +58,7 @@ function App() {
     setLoadingTokens(true);
     try {
       const tokens = await minting.getTokens();
+      console.log(tokens);
       const token_list = tokens.token_list.tokens;
       await getNftDetail(token_list);
 
@@ -70,32 +71,21 @@ function App() {
   }
 
   const getNftDetail = async (token_list) => {
-    let lista = [];
- 
-    try {
+    const promises = token_list.map(token => {
+        return minting.getNftDossier(token);
+    });
 
-      await token_list.map(async (token) => {
-    
-          const nftDossier = await minting.getNftDossier(token);
+    const result = await Promise.allSettled(promises);
+    const tokens = result
+        .filter(item => item.status === 'fulfilled')
+        .map(item => item.value.nft_dossier)
+        .map(({ public_metadata: { extension } }) => ({
+            name: extension.name,
+            description: extension.description,
+            image: extension.image 
+        }));
 
-          const nftDetail = {
-            name: nftDossier.nft_dossier.public_metadata.extension.name,
-            description: nftDossier.nft_dossier.public_metadata.extension.description,
-            image: nftDossier.nft_dossier.public_metadata.extension.image,
-          }
-          lista.push(nftDetail)
-    
-
-      })
-
-      setNftList(lista);
-
-
-    } catch (e) {
-      console.error(e)
-    } finally {
-
-    }
+    setNftList(tokens);
   }
 
   const createViewingKey = async () => {

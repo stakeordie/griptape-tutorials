@@ -2,24 +2,21 @@ import React from "react";
 
 function TokenList({ nftList }) {
 
-    console.log("Children List", nftList)
-
-    const listTokens = nftList.map((item, index) =>
-        <li key={index}>{item}</li>
-    );
+    function mapTokens() {
+        return nftList.map(item => {
+            return (
+                <div>
+                    <div>{item.name}</div>
+                    <div>{item.description}</div>
+                    <div>{item.image}</div>
+                </div>
+            );
+        });
+    }
 
     return (
         <>
-            {
-                nftList.length > 0 ? (
-                    <div>
-                        <h1>Token's List</h1>
-                        <ul>{{ listTokens }}</ul>
-                    </div>
-
-                )
-                : null
-            }
+            {mapTokens()}
         </>
     )
 }
