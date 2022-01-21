@@ -1,38 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   bootstrap,
+  coinConvert,
   viewingKeyManager,
-  onAccountAvailable,
-  coinConvert
-} from '@stakeordie/griptape.js';
-import { sscrt } from './contracts/sscrt';
+} from "@stakeordie/griptape.js";
+import { sscrt } from "./contracts/sscrt";
 
 function App() {
+  const [isQueryLoading, setQueryLoading] = useState(false);
+  const [isMessageLoading, setMessageLoading] = useState(false);
+  const [tokens, setTokens] = useState("");
+  const [amount, setAmount] = useState("");
+  const [address, setAddress] = useState("");
 
-  var [loading, setLoading] = useState(false);
-  var [loadingSend, setLoadingSend] = useState(false);
-  var [viewingKey, setViewingKey] = useState('');
-  var [coins, setCoins] = useState('');
-  var [amount, setAmount] = useState('');
-  var [address, setAddress] = useState('');
+  const sendTokens = async () => {
+    setMessageLoading(true);
 
-  useEffect(() => {
-    onAccountAvailable(() => {
-      const key = viewingKeyManager.get(sscrt.at);
-      if (key) {
-        setViewingKey(key);
-      }
-    })
-  }, []);
+    try {
+      const theAmount = coinConvert(amount, 6, "machine");
+      await sscrt.send(address, theAmount);
 
-  const connect = async () => {
-    await bootstrap();
-  }
-
-  const sendCoins = async () => {
-    setLoadingSend(true);
-    await sscrt.send(address, amount);
-    setLoadingSend(false);
+      setAmount("");
+      setAddress("");
+    } finally {
+      setMessageLoading(false);
+    }
   }
 
   const getBalance = async () => {
@@ -40,49 +32,55 @@ function App() {
 
     if (!key) return;
 
-    const amount = await sscrt.getBalance();
-    const balance = coinConvert(amount.balance.amount, 6, 'human');
-    setCoins(balance);
+    setQueryLoading(true);
+
+    try {
+      const { balance: { amount } } = await sscrt.getBalance();
+      const balance = coinConvert(amount, 6, "human");
+      setTokens(balance);
+    } finally {
+      setQueryLoading(false);
+    }
   }
 
   const createViewingKey = async () => {
-    setLoading(true);
+    setMessageLoading(true);
+
     try {
       const result = await sscrt.createViewingKey();
-
       if (result.isEmpty()) return;
-
       const { create_viewing_key: { key } } = result.parse();
       viewingKeyManager.add(sscrt, key);
-      setViewingKey(key);
-
-    } catch (e) {
-      // ignore for now
     } finally {
-      setLoading(false);
+      setMessageLoading(false);
     }
-
   }
 
   return (
     <>
       <h1>Hello, Griptape!</h1>
-      <p>Your balance is: {coins}</p>
-      <button onClick={() => { connect(); }}>Connect</button>
-      <button onClick={() => { createViewingKey() }}>{loading ? 'Loading...' : 'Create Viewing Key'}</button>
-      <button onClick={() => { getBalance() }}>Update Balance</button>
-      <br></br>
+      <p>Your balance is: {tokens}</p>
+      <button onClick={() => bootstrap()}>Connect</button>
+      <button onClick={() => createViewingKey()} disabled={isMessageLoading}>Create Viewing Key</button>
+      <button onClick={() => getBalance()} disabled={isQueryLoading || isMessageLoading}>Update Balance</button>
+
+      <br/>
+
       <input
         placeholder="Address to send to"
-        onChange={(e) => { setAddress(e.target.value) }}
-        value={address}></input>
-      <br></br>
+        onChange={(e) => setAddress(e.target.value)}
+        value={address}/>
+
+      <br/>
+
       <input
         placeholder="Amount to send"
-        onChange={(e) => { setAmount(e.target.value) }}
-        value={amount}></input>
-      <br></br>
-      <button onClick={() => { sendCoins() }}>{loadingSend ? 'Loading...' : 'Send'}</button>
+        onChange={(e) => setAmount(e.target.value)}
+        value={amount}/>
+
+      <br/>
+
+      <button onClick={() => sendTokens()} disabled={isMessageLoading}>Send tokens</button>
     </>
   );
 }
