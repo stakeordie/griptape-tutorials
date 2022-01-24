@@ -54,9 +54,9 @@ function App() {
       <h1>Hello, Griptape!</h1>
       <p>You have permit?: {isPermit ? 'Yes' : 'No'}</p>
       <p>Your balance is: {coins}</p>
-      <button onClick={() => { connect(); }}>Connect</button>
-      <button onClick={() => { createPermit() }}>{loading ? 'Loading...' : 'Create Permit'}</button>
-      <button onClick={() => { getBalance() }}>{loadingBalance ? 'Loading...' : 'Get Balance'}</button>
+      <button onClick={connect}>Connect</button>
+      <button onClick={createPermit} >{loading ? 'Loading...' : 'Create Permit'}</button>
+      <button onClick={getBalance} >{loadingBalance ? 'Loading...' : 'Get Balance'}</button>
     </>
   );
 }
