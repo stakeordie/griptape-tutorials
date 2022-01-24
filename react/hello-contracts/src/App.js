@@ -1,19 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { counterContract } from './contracts/counter';
-import { bootstrap } from "@stakeordie/griptape.js";
+import { bootstrap, onAccountAvailable } from "@stakeordie/griptape.js";
 
 function App() {
 
   const [count, setCount] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+
+  useEffect(() => {
+    onAccountAvailable(() => {
+      setIsConnected(true);
+    })
+  }, []);
 
   const getCount = async () => {
     const response = await counterContract.getCount();
     setCount(response.count);
-  }
-
-  const connect = async () => {
-    await bootstrap();
   }
 
   const incrementCount = async () => {
@@ -25,11 +28,16 @@ function App() {
 
   return (
     <>
-      <h1>Hello, Griptape!</h1>
+      <h1>Hello, Transactions!</h1>
+      <p>Is connected? {isConnected ? "Yes" : "No"}</p>
+      <button
+        onClick={() => bootstrap()}
+        disabled={isConnected}>Bootstrap
+      </button>
       <p>Your count is: {count}</p>
-      <button onClick={() => { connect(); }}>Connect</button>
-      <button onClick={() => { getCount() }}>Get count</button>
-      <button onClick={() => { incrementCount() }}>{loading ? 'Loading...' : 'Increment by 1'}</button>
+      <button onClick={() => { incrementCount(); }}>{loading ? 'Loading...' : 'Increment by 1'}</button>
+      <button onClick={() => { getCount(); }}>Get count</button>
+
     </>
   );
 }
