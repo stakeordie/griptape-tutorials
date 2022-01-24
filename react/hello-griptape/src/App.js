@@ -32,7 +32,7 @@ function App() {
   return (
     <>
       <h1>Hello, Griptape!</h1>
-      <button onClick={() => { connect(); }}>Connect</button>
+      <button onClick={connect}>Connect</button>
       <p>Your address is: {address}</p>
       <p>Your balance is: {coins}</p>
     </>
