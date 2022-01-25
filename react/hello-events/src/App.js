@@ -22,17 +22,13 @@ function App() {
         setViewingKey(key);
         getBalance();
       }
-    })
+    });
 
     onAccountChange(() => {
       alert("You have changed your account, please refresh this page.")
       setIsAccountChanged(false);
     });
   }, []);
-
-  const connect = async () => {
-    await bootstrap();
-  }
 
   const getBalance = async () => {
     const key = viewingKeyManager.get(sscrt.at);
@@ -68,11 +64,19 @@ function App() {
 
   }
 
+  const getBalance = async () => {
+    const key = viewingKeyManager.get(sscrt.at);
+    if (!key) return;
+    const amount = await sscrt.getBalance();
+    const balance = coinConvert(amount.balance.amount, 6, 'human');
+    setCoins(balance);
+  }
+
   return (
     <>
-      <h1>Hello, Griptape!</h1>
+      <h1>Hello, Events!</h1>
       <p>Your balance is: {coins}</p>
-      <button onClick={() => { connect(); }}>Connect</button>
+      <button onClick={() => { bootstrap() }}>Connect</button>
       <button onClick={() => { createViewingKey() }}>{loading ? 'Loading...' : 'Create Viewing Key'}</button>
       <button hidden={isAccountChanged} onClick={() => { window.location.reload(); }}>Refresh</button>
     </>
