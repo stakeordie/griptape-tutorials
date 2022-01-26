@@ -71,11 +71,11 @@ function App() {
       <h1>Hello, Events!</h1>
       <p>Is connected? {isConnected ? "Yes" : "No"}</p>
       <button
-        onClick={() => bootstrap()}
+        onClick={() => { bootstrap(); }}
         disabled={isConnected}>Bootstrap
       </button>
       <p>Your balance is: {coins}</p>
-      <button onClick={() => { createViewingKey() }}>{loading ? 'Loading...' : 'Create Viewing Key'}</button>
+      <button disabled={!isConnected} onClick={() => { createViewingKey(); }}>{loading ? 'Loading...' : 'Create Viewing Key'}</button>
       <button hidden={isAccountChanged} onClick={() => { window.location.reload(); }}>Refresh</button>
     </>
   );

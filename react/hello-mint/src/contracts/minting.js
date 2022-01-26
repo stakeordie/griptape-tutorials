@@ -37,7 +37,7 @@ const definition = extendContract(snip721Def, def);
 
 export const minting = createContract({
   id: 'nft',
-  at: 'secret1kdvrmklgrx4m7pdmlwrf6nhjx98wyttmxj908l',
+  at: 'secret1kmuezv2h428mepwq80utphggfccvul9dhqwd95',
   definition: definition
 });
   

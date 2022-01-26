@@ -23,10 +23,6 @@ function App() {
     })
   }, []);
 
-  const connect = async () => {
-    await bootstrap();
-  }
-
   const getBalance = async () => {
 
     setLoadingBalance(true)
@@ -43,7 +39,7 @@ function App() {
     setLoading(true);
     try {
       await enablePermit(sscrt, ["balance"]);
-
+      setIsPermit(hasPermit(sscrt));
     } catch (e) {
       // ignore for now
     } finally {
@@ -56,16 +52,14 @@ function App() {
       <h1>Hello, Griptape!</h1>
       <p>Is connected? {isConnected ? "Yes" : "No"}</p>
       <button
-        onClick={() => bootstrap()}
+        onClick={() => { bootstrap(); }}
         disabled={isConnected}>Bootstrap
       </button>
       <p>You have permit?: {isPermit ? 'Yes' : 'No'}</p>
       <p>Your balance is: {coins}</p>
-      <button onClick={connect}>Connect</button>
-      <button onClick={createPermit} >{loading ? 'Loading...' : 'Create Permit'}</button>
-      <button onClick={getBalance} >{loadingBalance ? 'Loading...' : 'Get Balance'}</button>
+      <button disabled={!isConnected} onClick={createPermit} >{loading ? 'Loading...' : 'Create Permit'}</button>
+      <button disabled={!isPermit} onClick={getBalance} >{loadingBalance ? 'Loading...' : 'Get Balance'}</button>
     </>
   );
 }
-
 export default App;

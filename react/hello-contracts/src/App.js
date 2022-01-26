@@ -31,15 +31,14 @@ function App() {
       <h1>Hello, Contracts!</h1>
       <p>Is connected? {isConnected ? "Yes" : "No"}</p>
       <button
-        onClick={() => bootstrap()}
+        onClick={() => { bootstrap(); }}
         disabled={isConnected}>Bootstrap
       </button>
       <p>Your count is: {count}</p>
-      <button onClick={() => { incrementCount(); }}>{loading ? 'Loading...' : 'Increment by 1'}</button>
-      <button onClick={() => { getCount(); }}>Get count</button>
+      <button disabled={!isConnected} onClick={() => { incrementCount(); }}>{loading ? 'Loading...' : 'Increment by 1'}</button>
+      <button disabled={!isConnected} onClick={() => { getCount(); }}>Get count</button>
 
     </>
   );
 }
-
 export default App;

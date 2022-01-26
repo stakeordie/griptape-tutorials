@@ -21,10 +21,6 @@ function App() {
     })
   }, []);
 
-  const connect = async () => {
-    await bootstrap();
-  }
-
   const getBalance = async () => {
     var balance = await getNativeCoinBalance();
     balance = coinConvert(balance, 6, 'human');
@@ -36,7 +32,7 @@ function App() {
       <h1>Hello, Griptape!</h1>
       <p>Is connected? {isConnected ? "Yes" : "No"}</p>
       <button
-        onClick={() => bootstrap()}
+        onClick={() => { bootstrap(); }}
         disabled={isConnected}>Bootstrap
       </button>
       <p>Your address is: {address}</p>
@@ -44,5 +40,4 @@ function App() {
     </>
   );
 }
-
 export default App;

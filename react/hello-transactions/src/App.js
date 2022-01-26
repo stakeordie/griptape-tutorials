@@ -35,8 +35,7 @@ function App() {
     try {
       const result = await sscrt.createViewingKey();
       if (result.isEmpty()) return;
-      const { create_viewing_key: { key } } =
-        result.parse();
+      const { create_viewing_key: { key } } = result.parse();
       viewingKeyManager.add(sscrt, key);
     } finally {
       setMessageLoading(false);

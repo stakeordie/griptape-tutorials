@@ -36,7 +36,7 @@ function App() {
       viewingKeyManager.add(sscrt, key);
       setViewingKey(key);
       const currentKey = viewingKeyManager.get(sscrt.at);
-     
+
       if (currentKey) {
         viewingKeyManager.set(sscrt, key);
       } else {
@@ -63,13 +63,13 @@ function App() {
       <h1>Hello, Viewing Keys!</h1>
       <p>Is connected? {isConnected ? "Yes" : "No"}</p>
       <button
-        onClick={() => bootstrap()}
+        onClick={() => { bootstrap(); }}
         disabled={isConnected}>Bootstrap
       </button>
       <p>Your viewing key is: {viewingKey}</p>
       <p>Your balance is: {coins}</p>
-      <button onClick={() => { createViewingKey() }}>{loading ? 'Loading...' : 'Create Viewing Key'}</button>
-      <button onClick={() => { getBalance() }}>Get balance</button>
+      <button disabled={!isConnected} onClick={() => { createViewingKey(); }}>{loading ? 'Loading...' : 'Create Viewing Key'}</button>
+      <button disabled={!viewingKey} onClick={() => { getBalance(); }}>Get balance</button>
     </>
   );
 }

@@ -92,29 +92,28 @@ function App() {
         viewingKeyManager.add(minting, key);
       }
     } catch (e) {
-      console.error(e)
+      // ignore for now
     } finally {
       setLoading(false);
     }
   }
-  
+
   return (
     <>
       <h1>Hello, Mint!</h1>
       <p>Is connected? {isConnected ? "Yes" : "No"}</p>
       <button
-        onClick={() => bootstrap()}
+        onClick={() => { bootstrap(); }}
         disabled={isConnected}>Bootstrap
       </button>
-      <button onClick={() => { mint(); }}>{loadingMint ? 'Loading...' : 'Mint'}</button>
+      <button disabled={!isConnected} onClick={() => { mint(); }}>{loadingMint ? 'Loading...' : 'Mint'}</button>
       <br></br>
       <br></br>
-      <button onClick={() => { getTokens(); }}>{loadingTokens ? 'Loading...' : 'Get Tokens'}</button>
-      <button onClick={() => { createViewingKey(); }}>{loading ? 'Loading...' : 'Create Viewing Key'}</button>
+      <button disabled={!isConnected} onClick={() => { createViewingKey(); }}>{loading ? 'Loading...' : 'Create Viewing Key'}</button>
+      <button disabled={!isConnected || !viewingKey}  onClick={() => { getTokens(); }}>{loadingTokens ? 'Loading...' : 'Get Tokens'}</button>
       <br></br>
       <TokenList nftList={nftList} />
     </>
   );
 }
-
 export default App;
