@@ -11,9 +11,11 @@ function App() {
 
   var [address, setAddress] = useState('');
   var [coins, setCoins] = useState(undefined);
+  var [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     onAccountAvailable(() => {
+      setIsConnected(true);
       setAddress(getAddress());
       getBalance();
     })
@@ -32,7 +34,11 @@ function App() {
   return (
     <>
       <h1>Hello, Griptape!</h1>
-      <button onClick={connect}>Connect</button>
+      <p>Is connected? {isConnected ? "Yes" : "No"}</p>
+      <button
+        onClick={() => bootstrap()}
+        disabled={isConnected}>Bootstrap
+      </button>
       <p>Your address is: {address}</p>
       <p>Your balance is: {coins}</p>
     </>

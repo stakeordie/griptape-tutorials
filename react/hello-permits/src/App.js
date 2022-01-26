@@ -14,9 +14,11 @@ function App() {
   var [loadingBalance, setLoadingBalance] = useState(false);
   var [isPermit, setIsPermit] = useState(false);
   var [coins, setCoins] = useState('');
+  var [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     onAccountAvailable(() => {
+      setIsConnected(true);
       setIsPermit(hasPermit(sscrt));
     })
   }, []);
@@ -52,6 +54,11 @@ function App() {
   return (
     <>
       <h1>Hello, Griptape!</h1>
+      <p>Is connected? {isConnected ? "Yes" : "No"}</p>
+      <button
+        onClick={() => bootstrap()}
+        disabled={isConnected}>Bootstrap
+      </button>
       <p>You have permit?: {isPermit ? 'Yes' : 'No'}</p>
       <p>Your balance is: {coins}</p>
       <button onClick={connect}>Connect</button>

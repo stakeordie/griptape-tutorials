@@ -14,9 +14,11 @@ function App() {
   var [coins, setCoins] = useState('');
   var [viewingKey, setViewingKey] = useState('');
   var [isAccountChanged, setIsAccountChanged] = useState(true);
+  var [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     onAccountAvailable(() => {
+      setIsConnected(true);
       const key = viewingKeyManager.get(sscrt.at);
       if (key) {
         setViewingKey(key);
@@ -29,14 +31,6 @@ function App() {
       setIsAccountChanged(false);
     });
   }, []);
-
-  const getBalance = async () => {
-    const key = viewingKeyManager.get(sscrt.at);
-    if (!key) return;
-    const amount = await sscrt.getBalance();
-    const balance = coinConvert(amount.balance.amount, 6, 'human');
-    setCoins(balance);
-  }
 
   const createViewingKey = async () => {
 
@@ -75,8 +69,12 @@ function App() {
   return (
     <>
       <h1>Hello, Events!</h1>
+      <p>Is connected? {isConnected ? "Yes" : "No"}</p>
+      <button
+        onClick={() => bootstrap()}
+        disabled={isConnected}>Bootstrap
+      </button>
       <p>Your balance is: {coins}</p>
-      <button onClick={() => { bootstrap() }}>Connect</button>
       <button onClick={() => { createViewingKey() }}>{loading ? 'Loading...' : 'Create Viewing Key'}</button>
       <button hidden={isAccountChanged} onClick={() => { window.location.reload(); }}>Refresh</button>
     </>

@@ -28,7 +28,7 @@ function App() {
 
   return (
     <>
-      <h1>Hello, Transactions!</h1>
+      <h1>Hello, Contracts!</h1>
       <p>Is connected? {isConnected ? "Yes" : "No"}</p>
       <button
         onClick={() => bootstrap()}

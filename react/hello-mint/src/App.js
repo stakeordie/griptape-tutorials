@@ -14,19 +14,17 @@ function App() {
   var [loadingTokens, setLoadingTokens] = useState(false);
   var [viewingKey, setViewingKey] = useState('');
   var [nftList, setNftList] = useState([]);
+  var [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     onAccountAvailable(() => {
+      setIsConnected(true);
       const key = viewingKeyManager.get(minting.at);
       if (key) {
         setViewingKey(key);
       }
     })
   }, []);
-
-  const connect = async () => {
-    await bootstrap();
-  }
 
   const mint = async () => {
     var date = Date.now();
@@ -102,8 +100,12 @@ function App() {
   
   return (
     <>
-      <h1>Hello, Griptape!</h1>
-      <button onClick={() => { connect(); }}>Connect</button>
+      <h1>Hello, Mint!</h1>
+      <p>Is connected? {isConnected ? "Yes" : "No"}</p>
+      <button
+        onClick={() => bootstrap()}
+        disabled={isConnected}>Bootstrap
+      </button>
       <button onClick={() => { mint(); }}>{loadingMint ? 'Loading...' : 'Mint'}</button>
       <br></br>
       <br></br>
