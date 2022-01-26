@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>Hello, Griptape!</h1>
+    <p>Is connected? {{isConnected ? "Yes" : "No"}}</p>
     <button @click="connect">Connect</button>
     <p>Your address is: {{ address }}</p>
     <p>You balance is: {{ balance }}</p>
@@ -20,12 +21,14 @@ export default {
   data() {
     return {
       address: '',
-      balance: ''
+      balance: '',
+      isConnected: false
     }
   },
 
   mounted() {
     onAccountAvailable(() => {
+      this.isConnected=true;
       this.address = getAddress();
       this.setBalance();
     });

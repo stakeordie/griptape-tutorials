@@ -1,26 +1,33 @@
 <template>
   <div>
-    <h1>Hello, Griptape!</h1>
-    <p>Your count is: {{ count }}</p>
-    <button @click="connect">Connect</button>
-    <button @click="getCount">Get count</button>
-    <button @click="incrementCount">
-      <span v-if="loading">Loading...</span>
-      <span v-else>Increment by 1</span>
-    </button>
+    <h1>Hello, Contracts!</h1>
+      <p>Is connected? {{isConnected ? "Yes" : "No"}}</p>
+      <button
+        @click="connect"
+        :disabled="isConnected">
+        Bootstrap
+      </button>
+      <p>Your count is: {{count}}</p>
+      <button @click="incrementCount">{{loading ? 'Loading...' : 'Increment by 1'}}</button>
+      <button @click="getCount">Get count</button>
   </div>
 </template>
 
 <script>
 import { counterContract } from './contracts/counter';
-import { bootstrap } from '@stakeordie/griptape.js';
+import { bootstrap, onAccountAvailable } from '@stakeordie/griptape.js';
 
 export default {
   data: () => ({
     count: '',
-    loading: false
+    loading: false,
+    isConnected: false
   }),
-
+  mounted(){
+    onAccountAvailable(()=>{
+      this.isConnected= true;
+    })
+  },
   methods: {
     async getCount() {
       const response = await counterContract.getCount();

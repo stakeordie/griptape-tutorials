@@ -1,14 +1,15 @@
 <template>
   <div>
-    <h1>Hello, Griptape!</h1>
+    <h1>Hello, Viewing Keys!</h1>
+    <p>Is connected? {{isConnected ? "Yes" : "No"}}</p>
+    <button @click="connect">Bootstrap</button>
     <p>Your viewing key is: {{ viewingKey }}</p>
     <p>Your balance is: {{ balance }}</p>
-    <button @click="connect">Connect</button>
-    <button @click="createViewingKey">
+    <button :disabled="!isConnected"  @click="createViewingKey">
       <span v-if="loading">Loading...</span>
-      <span v-else>Create Viewing Key</span>
+      <span  v-else>Create Viewing Key</span>
     </button>
-    <button @click="getBalance">Get balance</button>
+    <button :disabled="!viewingKey" @click="getBalance">Get balance</button>
   </div>
 </template>
 
@@ -26,12 +27,14 @@ export default {
     return {
       viewingKey: '',
       balance: '',
-      loading: false
+      loading: false,
+      isConnected: false
     }
   },
 
   mounted() {
     onAccountAvailable(() => {
+      this.isConnected = true;
       const key = viewingKeyManager.get(sscrt.at);
       if (key) {
         this.viewingKey = key;

@@ -1,11 +1,12 @@
 <template>
   <div>
-      <h1>Hello, Griptape!</h1>
+      <h1>Hello, Permits!</h1>
+      <p>Is connected? {{isConnected ? "Yes" : "No"}}</p>
+      <button :disabled="isConnected" @click="connect">Bootstrap</button>
       <p>You have permit?: {{isPermit ? 'Yes' : 'No'}}</p>
       <p>Your balance is: {{balance}}</p>
-      <button @click="connect">Connect</button>
-      <button @click="createPermit">{{loading ? 'Loading...' : 'Create Permit'}}</button>
-      <button @click="getBalance">{{loadingBalance ? 'Loading...' : 'Get Balance'}}</button>
+      <button :disabled="!isConnected" @click="createPermit">{{loading ? 'Loading...' : 'Create Permit'}}</button>
+      <button :disabled="!isPermit" @click="getBalance">{{loadingBalance ? 'Loading...' : 'Get Balance'}}</button>
   </div>
 </template>
 
@@ -24,13 +25,15 @@ export default {
     return {
       isPermit: '',
       loadingBalance: '',
-      loading: false
+      loading: false,
+      isConnected: false
     }
   },
 
   mounted() {
     onAccountAvailable(() => {
       this.isPermit = hasPermit(sscrt);
+      this.isConnected = true;
     })
   },
 

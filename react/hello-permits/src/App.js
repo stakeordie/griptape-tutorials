@@ -49,7 +49,7 @@ function App() {
 
   return (
     <>
-      <h1>Hello, Griptape!</h1>
+      <h1>Hello, Permits!</h1>
       <p>Is connected? {isConnected ? "Yes" : "No"}</p>
       <button
         onClick={() => { bootstrap(); }}

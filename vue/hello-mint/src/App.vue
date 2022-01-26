@@ -1,15 +1,16 @@
 <template>
   <div>
-    <h1>Hello, Griptape!</h1>
-    <button @click="connect">Connect</button>
-    <button @click="mint">{{loadingMint ? 'Loading...' : 'Mint'}}</button>
+    <h1>Hello, Mint!</h1>
+    <p>Is connected? {{isConnected ? "Yes" : "No"}}</p>
+    <button :disabled="isConnected" @click="connect">Bootstrap</button>
+    <button :disabled="!isConnected" @click="mint">{{loadingMint ? 'Loading...' : 'Mint'}}</button>
     <br />
     <br />
-    <button @click="getTokens">
-      {{loadingTokens ? 'Loading...' : 'Get Tokens'}}
-    </button>
-    <button @click="createViewingKey">
+    <button :disabled="!isConnected" @click="createViewingKey">
       {{loading ? 'Loading...' : 'Create Viewing Key'}}
+    </button>
+    <button :disabled="!isConnected || !key" @click="getTokens">
+      {{loadingTokens ? 'Loading...' : 'Get Tokens'}}
     </button>
     <br />
     <div v-bind:key="item.name" v-for="item in tokens">
@@ -29,7 +30,8 @@
 <script>
 import {
   viewingKeyManager,
-  bootstrap
+  bootstrap,
+  onAccountAvailable
 } from '@stakeordie/griptape.js';
 import { minting } from './contracts/minting';
 
@@ -37,10 +39,21 @@ export default {
   data() {
     return {
       loading: false,
+      isConnected: false,
       loadingMint:false,
       loadingTokens:false,
+      key:"",
       tokens:[]
     }
+  },
+  mounted(){
+    onAccountAvailable(()=>{
+      this.isConnected = true;
+      const key = viewingKeyManager.get(minting.at);
+      if (key) {
+        this.key = key;
+      }
+    })
   },
   methods: {
     async createViewingKey  () {
@@ -52,6 +65,7 @@ export default {
 
         const { viewing_key: { key } } = result.parse();
         viewingKeyManager.add(minting, key);
+        this.key = key;
       } catch (e) {
         console.error(e)
       } finally {
