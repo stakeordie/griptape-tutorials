@@ -17,10 +17,14 @@ function App() {
   var [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    onAccountAvailable(() => {
+    const removeOnAccountAvailable  = onAccountAvailable(() => {
       setIsConnected(true);
       setIsPermit(hasPermit(sscrt));
     })
+
+    return () => {
+      removeOnAccountAvailable();
+    }
   }, []);
 
   const getBalance = async () => {

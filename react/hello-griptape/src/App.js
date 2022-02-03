@@ -14,11 +14,15 @@ function App() {
   var [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    onAccountAvailable(() => {
+    const removeOnAccountAvailable = onAccountAvailable(() => {
       setIsConnected(true);
       setAddress(getAddress());
       getBalance();
     })
+
+    return ()=>{
+      removeOnAccountAvailable()
+    }
   }, []);
 
   const getBalance = async () => {

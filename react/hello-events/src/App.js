@@ -17,7 +17,7 @@ function App() {
   var [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    onAccountAvailable(() => {
+    const removeAccountAvailableListener = onAccountAvailable(() => {
       setIsConnected(true);
       const key = viewingKeyManager.get(sscrt.at);
       if (key) {
@@ -26,10 +26,15 @@ function App() {
       }
     });
 
-    onAccountChange(() => {
+    const removeAccountChangeListener = onAccountChange(() => {
       alert("You have changed your account, please refresh this page.")
       setIsAccountChanged(false);
     });
+
+    return ()=> {
+      removeAccountAvailableListener();
+      removeAccountChangeListener();
+    }
   }, []);
 
   const createViewingKey = async () => {

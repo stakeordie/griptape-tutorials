@@ -9,9 +9,13 @@ function App() {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    onAccountAvailable(() => {
+    const removeOnAccountAvailable = onAccountAvailable(() => {
       setIsConnected(true);
     })
+
+    return ()=> {
+      removeOnAccountAvailable()
+    }
   }, []);
 
   const getCount = async () => {

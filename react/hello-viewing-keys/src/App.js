@@ -15,13 +15,16 @@ function App() {
   var [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    onAccountAvailable(() => {
+    const removeOnAccountAvailable = onAccountAvailable(() => {
       setIsConnected(true);
       const key = viewingKeyManager.get(sscrt.at);
       if (key) {
         setViewingKey(key);
       }
     })
+    return () => {
+      removeOnAccountAvailable();
+    }
   }, []);
 
   const createViewingKey = async () => {

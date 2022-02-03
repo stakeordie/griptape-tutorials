@@ -1,4 +1,4 @@
-import { createContract } from '@stakeordie/griptape.js';
+import { createContractClient } from '@stakeordie/griptape.js';
 
 const counterDef = {
   messages: {
@@ -17,7 +17,7 @@ const counterDef = {
   }
 };
 
-export const counterContract = createContract({
+export const counterContract = createContractClient({
   id: 'counter',
   at: 'secret1vk6j69amm37zkhgqgtvjkymjeee4yhxvmmyxja',
   definition: counterDef

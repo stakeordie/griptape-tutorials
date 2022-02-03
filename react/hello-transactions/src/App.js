@@ -19,14 +19,18 @@ function App() {
   const [amount, setAmount] = useState(0);
 
   useEffect(() => {
-    onAccountAvailable(() => {
+    const removeOnAccountAvailable = onAccountAvailable(() => {
       setIsConnected(true);
       hasViewingKey();
     });
 
-    onViewingKeyCreated(() => {
+    const removeOnViewingKeyCreated = onViewingKeyCreated(() => {
       hasViewingKey();
     });
+    return () => {
+      removeOnAccountAvailable();
+      removeOnViewingKeyCreated();
+    };
   }, []);
 
   async function createViewingKey() {
