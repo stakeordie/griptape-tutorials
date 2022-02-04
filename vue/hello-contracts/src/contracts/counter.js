@@ -1,5 +1,5 @@
 import {
-  createContract
+  createContractClient
 } from '@stakeordie/griptape.js';
 
 const counterDef = {
@@ -19,7 +19,7 @@ const counterDef = {
   }
 };
 
-export const counterContract = createContract({
+export const counterContract = createContractClient({
   id: 'counter',
   at: 'secret1vk6j69amm37zkhgqgtvjkymjeee4yhxvmmyxja',
   definition: counterDef

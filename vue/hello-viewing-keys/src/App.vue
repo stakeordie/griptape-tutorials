@@ -28,12 +28,13 @@ export default {
       viewingKey: '',
       balance: '',
       loading: false,
-      isConnected: false
+      isConnected: false,
+      removeOnAccountAvailable:null
     }
   },
 
   mounted() {
-    onAccountAvailable(() => {
+    this.removeOnAccountAvailable = onAccountAvailable(() => {
       this.isConnected = true;
       const key = viewingKeyManager.get(sscrt.at);
       if (key) {
@@ -41,7 +42,9 @@ export default {
       }
     });
   },
-
+  unmounted(){
+    this.removeOnAccountAvailable();
+  },
   methods: {
     async createViewingKey() {
       this.loading = true;

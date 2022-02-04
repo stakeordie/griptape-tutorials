@@ -26,15 +26,19 @@ export default {
       isPermit: '',
       loadingBalance: '',
       loading: false,
-      isConnected: false
+      isConnected: false,
+      removeOnAccountAvailable:null,
     }
   },
 
   mounted() {
-    onAccountAvailable(() => {
+    this.removeOnAccountAvailable = onAccountAvailable(() => {
       this.isPermit = hasPermit(sscrt);
       this.isConnected = true;
     })
+  },
+  unmounted(){
+    this.removeOnAccountAvailable();
   },
 
   methods: {

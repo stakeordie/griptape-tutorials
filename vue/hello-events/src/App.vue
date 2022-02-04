@@ -30,12 +30,14 @@ export default {
       balance: '',
       loading: false,
       isAccountChanged:true,
-      isConnected:false
+      isConnected:false,
+      removeOnAccountAvailable: null,
+      removeOnAccountChange: null,
     }
   },
 
   mounted() {
-    onAccountAvailable(async () => {
+    this.removeOnAccountAvailable = onAccountAvailable(async () => {
       this.isConnected = true;
       const key = viewingKeyManager.get(sscrt.at);
       if (key) {
@@ -43,12 +45,15 @@ export default {
         await this.getBalance();
       }
     });
-    onAccountChange(() => {
+    this.removeOnAccountChange = onAccountChange(() => {
       alert("You have changed your account, please refresh this page.");
       this.isAccountChanged = false;
     });
   },
-
+  unmounted(){
+    this.removeOnAccountAvailable();
+    this.removeOnAccountChange();
+  },
   methods: {
     reload(){
       window.location.reload()

@@ -1,5 +1,5 @@
 import {
-  createContract,
+  createContractClient,
   snip20Def,
   extendContract
 } from '@stakeordie/griptape.js';
@@ -14,7 +14,7 @@ const sscrt_permit = {
     }
   }
 }
-export const sscrt = createContract({
+export const sscrt = createContractClient({
   id: 'sscrt',
   at: 'secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg',
   definition: extendContract(snip20Def,sscrt_permit)

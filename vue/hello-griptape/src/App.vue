@@ -22,16 +22,21 @@ export default {
     return {
       address: '',
       balance: '',
-      isConnected: false
+      isConnected: false,
+      removeOnAccountAvailable: null, 
     }
   },
 
   mounted() {
-    onAccountAvailable(() => {
+    this.removeOnAccountAvailable = onAccountAvailable(() => {
       this.isConnected=true;
       this.address = getAddress();
       this.setBalance();
     });
+  },
+
+  unmounted(){
+    this.removeOnAccountAvailable();
   },
 
   methods: {

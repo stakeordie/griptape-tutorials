@@ -21,12 +21,16 @@ export default {
   data: () => ({
     count: '',
     loading: false,
-    isConnected: false
+    isConnected: false,
+    removeOnAccountAvailable:null
   }),
   mounted(){
-    onAccountAvailable(()=>{
+    this.removeOnAccountAvailable = onAccountAvailable(()=>{
       this.isConnected= true;
     })
+  },
+  unmounted(){
+    this.removeOnAccountAvailable()
   },
   methods: {
     async getCount() {
