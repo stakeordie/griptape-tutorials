@@ -1,5 +1,5 @@
 import {
-  createContract,
+  createContractClient,
   snip721Def,
   extendContract
 } from '@stakeordie/griptape.js';
@@ -35,7 +35,7 @@ const def = {
 
 const definition = extendContract(snip721Def, def);
 
-export const minting = createContract({
+export const minting = createContractClient({
   id: 'nft',
   at: 'secret1kmuezv2h428mepwq80utphggfccvul9dhqwd95',
   definition: definition

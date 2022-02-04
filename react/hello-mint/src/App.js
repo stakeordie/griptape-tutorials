@@ -17,13 +17,16 @@ function App() {
   var [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    onAccountAvailable(() => {
+    const removeOnAccountAvailable = onAccountAvailable(() => {
       setIsConnected(true);
       const key = viewingKeyManager.get(minting.at);
       if (key) {
         setViewingKey(key);
       }
     })
+    return () => {
+      removeOnAccountAvailable();
+    }
   }, []);
 
   const mint = async () => {
@@ -35,7 +38,7 @@ function App() {
     }
     setLoadingMint(true);
     try {
-      const mint = await minting.mintNft(data);
+      await minting.mintNft(data);
     } catch (e) {
       // ignore for now
     } finally {
@@ -61,16 +64,27 @@ function App() {
       return minting.getNftDossier(token);
     });
 
-    const result = await Promise.allSettled(promises);
+    const result = await Promise.all(promises);
     const tokens = result
-      .filter(item => item.status === 'fulfilled')
-      .map(item => item.value.nft_dossier)
-      .map(({ public_metadata: { extension } }) => ({
-        name: extension.name,
-        description: extension.description,
-        image: extension.image
-      }));
-
+      .map((ele) => {
+          const { nft_dossier:{ public_metadata } }= ele
+          if(!public_metadata || !public_metadata.extension){
+            return {
+              name:  "",
+              description:  "",
+              image: ""
+            }
+          }
+          const { extension } = public_metadata;
+          const name = extension.name ? extension.name: "";
+          const description = extension.description ? extension.description: "";
+          const image = extension.image ? extension.image: "https://i.picsum.photos/id/551/200/300.jpg?hmac=pXJCWIikY_BiqwhtawBb8x1jxclDny0522ZprZVTJiU";
+          return {
+            name:  name,
+            description:  description,
+            image: image
+          }          
+      });
     setNftList(tokens);
   }
 

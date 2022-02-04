@@ -43,17 +43,21 @@ export default {
       loadingMint:false,
       loadingTokens:false,
       key:"",
-      tokens:[]
+      tokens:[],
+      removeOnAccountAvailable:null
     }
   },
   mounted(){
-    onAccountAvailable(()=>{
+    this.removeOnAccountAvailable = onAccountAvailable(()=>{
       this.isConnected = true;
       const key = viewingKeyManager.get(minting.at);
       if (key) {
         this.key = key;
       }
     })
+  },
+  unmounted(){
+    this.removeOnAccountAvailable();
   },
   methods: {
     async createViewingKey  () {
@@ -112,15 +116,34 @@ export default {
       return minting.getNftDossier(token);
     });
 
-    const result = await Promise.allSettled(promises);
+    const result = await Promise.all(promises);
+    const def = {
+      name:  "",
+      description:  "",
+      image: ""
+    };
+    
     this.tokens = result
-      .filter(item => item.status === 'fulfilled')
-      .map(item => item.value.nft_dossier)
-      .map(({ public_metadata: { extension } }) => ({
-        name: extension.name,
-        description: extension.description,
-        image: extension.image
-      }));
+      .map((ele) => {
+        try {
+          const { nft_dossier:{ public_metadata } }= ele
+          if(!public_metadata || !public_metadata.extension){
+            return def
+          }
+          const { extension } = public_metadata;
+          const name = extension.name ? extension.name: "";
+          const description = extension.description ? extension.description: "";
+          const image = extension.image ? extension.image: "https://i.picsum.photos/id/551/200/300.jpg?hmac=pXJCWIikY_BiqwhtawBb8x1jxclDny0522ZprZVTJiU";
+          return {
+            name:  name,
+            description:  description,
+            image: image
+          }          
+          
+        } catch (error) {
+          return def
+        }
+      });
     }
   }
 }
