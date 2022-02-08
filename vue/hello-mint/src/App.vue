@@ -81,14 +81,14 @@ export default {
     },
     async mint(){
       var date = Date.now();
-      const data = {
+      const extension = {
         name: `Example ${date}`,
         description: "test",
         image: 'https://i.picsum.photos/id/586/200/300.jpg?hmac=Ugf94OPRVzdbHxLu5sunf4PTa53u3gDVzdsh5jFCwQE'
       }
       this.loadingMint = true;
       try {
-        const mint = await minting.mintNft(data);
+        await minting.mintNft(null,null,{extension});
       } catch (e) {
         // ignore for now
       } finally {
@@ -100,7 +100,7 @@ export default {
     try {
       //Get list of tokens' id owned
       // Exam. ["4","65","87"]
-      const tokens = await minting.getTokens();
+      const tokens = await minting.getTokens(null,null,10,true);
       const token_list = tokens.token_list.tokens;
       //Get details of each token
       await this.getNftDetail(token_list);

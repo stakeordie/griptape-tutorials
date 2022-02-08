@@ -31,14 +31,14 @@ function App() {
 
   const mint = async () => {
     var date = Date.now();
-    const data = {
+    const extension = {
       name: `Example ${date}`,
       description: "test",
       image: 'https://i.picsum.photos/id/586/200/300.jpg?hmac=Ugf94OPRVzdbHxLu5sunf4PTa53u3gDVzdsh5jFCwQE'
     }
     setLoadingMint(true);
     try {
-      await minting.mintNft(data);
+      await minting.mintNft(null,null,{extension});
     } catch (e) {
       // ignore for now
     } finally {
@@ -49,11 +49,12 @@ function App() {
   const getTokens = async () => {
     setLoadingTokens(true);
     try {
-      const tokens = await minting.getTokens();
+      const tokens = await minting.getTokens(null,null,10,true);
+      console.log(tokens)
       const token_list = tokens.token_list.tokens;
       await getNftDetail(token_list);
     } catch (e) {
-      // ignore for now
+      console.error(e)
     } finally {
       setLoadingTokens(false);
     }
@@ -85,6 +86,7 @@ function App() {
             image: image
           }          
       });
+      
     setNftList(tokens);
   }
 
