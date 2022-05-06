@@ -6,7 +6,7 @@ import {
 } from '@stakeordie/griptape.js';
 
 // Define node to connect to.
-const restUrl = 'https://api.pulsar.griptapejs.com';
+const restUrl = 'http://rpc.pulsar.griptapejs.com:9091';
 
 // Get the Keplr provider.
 const provider = getKeplrAccountProvider();
