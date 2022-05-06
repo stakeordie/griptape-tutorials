@@ -5,7 +5,7 @@ import {
   getKeplrAccountProvider
 } from '@stakeordie/griptape.js';
 
-const restUrl = 'https://api.pulsar.griptapejs.com';
+const restUrl = 'http://rpc.pulsar.griptapejs.com:9091';
 const provider = getKeplrAccountProvider();
 function runApp() {
   createApp(App)
