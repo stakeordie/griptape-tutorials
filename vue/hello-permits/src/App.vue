@@ -28,6 +28,7 @@ export default {
       loading: false,
       isConnected: false,
       removeOnAccountAvailable:null,
+      balance: ""
     }
   },
 
