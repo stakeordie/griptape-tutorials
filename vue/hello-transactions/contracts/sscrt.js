@@ -10,7 +10,7 @@ const contractDef = {
       const handleMsg = {
         send: { recipient, amount, msg, padding },
       };
-      return { handleMsg, fees:36000 };
+      return { handleMsg, fees:100000 };
     },
     createViewingKey({ padding, entropy }) {
       const handleMsg = {
