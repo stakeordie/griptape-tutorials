@@ -50,7 +50,6 @@ function App() {
     setLoadingTokens(true);
     try {
       const tokens = await minting.getTokens(null,null,10,true);
-      console.log(tokens)
       const token_list = tokens.token_list.tokens;
       await getNftDetail(token_list);
     } catch (e) {
