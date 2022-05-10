@@ -1,5 +1,5 @@
 {
-  "name": "hello-world",
+  "name": "hello-griptape",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,8 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "@stakeordie/griptape.js": "^0.9.0",
+    "@stakeordie/griptape.js": "^0.9.9",
+    "axios": "^0.27.2",
     "core-js": "^3.6.5",
     "vue": "^3.0.0"
   },
